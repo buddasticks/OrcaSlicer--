@@ -161,12 +161,6 @@ void SavePresetDialog::Item::update()
         m_valid_type = NoValid;
     }
 
-    const Preset *existing = m_presets->find_preset(m_preset_name, false);
-    if (m_valid_type == Valid && existing && (existing->is_default || existing->is_system)) {
-        info_line = _L("Overwriting a system profile is not allowed.");
-        m_valid_type = NoValid;
-    }
-
     if (m_valid_type == Valid && existing && m_preset_name != m_presets->get_selected_preset_name()) {
         if (existing->is_compatible)
             info_line = from_u8((boost::format(_u8L("Preset \"%1%\" already exists.")) % m_preset_name).str());
