@@ -1,0 +1,37 @@
+name: Build OrcaSlicer Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup CMake
+        uses: jwlawson/actions-setup-cmake@v2
+
+      - name: Install Strawberry Perl
+        shell: powershell
+        run: choco install strawberryperl -y
+
+      - name: Pull LFS
+        run: git lfs pull
+
+      - name: Build
+        shell: cmd
+        run: build_release_vs.bat
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: orca-windows-build
+          path: build\src\Release\*
